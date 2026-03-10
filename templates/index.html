@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Class Deadline Tracker</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6fb;
+            color: #333;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: #0078D4;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        /* CARDS */
+
+        .card {
+            background: white;
+            padding: 18px;
+            margin-top: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* INPUTS */
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        /* BUTTONS */
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .add {
+            background: #0078D4;
+            color: white;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .add:hover {
+            background: #005fa3;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .filter-btn {
+            background: #444;
+            color: white;
+            flex: 1;
+        }
+
+        .filter-btn:hover {
+            background: #222;
+        }
+
+        .delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* TABLE */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #0078D4;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        /* BADGES */
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .urgent {
+            background: #ffdddd;
+            color: #c0392b;
+        }
+
+        .soon {
+            background: #fff4cc;
+            color: #9a7d0a;
+        }
+
+        .normal {
+            background: #eaf3ff;
+            color: #0078D4;
+        }
+
+        /* MOBILE TABLE */
+
+        @media(max-width:650px) {
+
+            table thead {
+                display: none;
+            }
+
+            table,
+            tbody,
+            tr,
+            td {
+                display: block;
+                width: 100%;
+            }
+
+            tr {
+                background: white;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                padding: 10px;
+            }
+
+            td {
+                border: none;
+                padding: 6px 0;
+            }
+
+            td:before {
+                font-weight: 600;
+                display: block;
+                color: #777;
+                font-size: 12px;
+            }
+
+            td:nth-child(1):before {
+                content: "Subject";
+            }
+
+            td:nth-child(2):before {
+                content: "Task";
+            }
+
+            td:nth-child(3):before {
+                content: "Date";
+            }
+
+            td:nth-child(4):before {
+                content: "Days Left";
+            }
+
+            td:nth-child(5):before {
+                content: "Action";
+            }
+
+        }
+    </style>
+
+    <script>
+
+        let currentDeadlineFilter = "all"
+        let currentSubjectFilter = "all"
+
+        function filterDeadlines(type) {
+            currentDeadlineFilter = type
+            applyFilters()
+        }
+
+        function filterSubject() {
+            currentSubjectFilter = document.getElementById("subjectFilter").value
+            applyFilters()
+        }
+
+        function applyFilters() {
+
+            let rows = document.querySelectorAll("tbody tr")
+
+            let today = new Date()
+            let daysUntilSunday = 7 - today.getDay()
+
+            rows.forEach(row => {
+
+                let days = parseInt(row.dataset.days)
+                let subject = row.dataset.subject
+
+                let deadlineMatch = false
+                let subjectMatch = false
+
+                if (currentDeadlineFilter === "all")
+                    deadlineMatch = true
+                else if (currentDeadlineFilter === "nearest")
+                    deadlineMatch = (days <= 3)
+                else if (currentDeadlineFilter === "week")
+                    deadlineMatch = (days >= 0 && days <= daysUntilSunday)
+
+                if (currentSubjectFilter === "all")
+                    subjectMatch = true
+                else
+                    subjectMatch = (subject === currentSubjectFilter)
+
+                if (deadlineMatch && subjectMatch)
+                    row.style.display = ""
+                else
+                    row.style.display = "none"
+
+            })
+
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <div class="header">
+        📅 Class Deadline Tracker
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h3>Filters</h3>
+
+            <div class="filter-row">
+
+                <button class="filter-btn" onclick="filterDeadlines('all')">All</button>
+
+                <button class="filter-btn" onclick="filterDeadlines('nearest')">Nearest</button>
+
+                <button class="filter-btn" onclick="filterDeadlines('week')">This Week</button>
+
+            </div>
+
+            <br>
+
+            <select id="subjectFilter" onchange="filterSubject()">
+
+                <option value="all">All Subjects</option>
+
+                {% for s in subjects %}
+
+                <option value="{{s}}">{{s}}</option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Deadlines</h3>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Subject</th>
+                        <th>Task</th>
+                        <th>Date</th>
+                        <th>Days Left</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for d in deadlines %}
+
+                    <tr data-subject="{{d.subject}}" data-days="{{d.days_left}}">
+
+                        <td>{{d.subject}}</td>
+
+                        <td>{{d.task}}</td>
+
+                        <td>{{d.date}}</td>
+
+                        <td>
+
+                            {% if d.days_left <= 2 %} <span class="badge urgent">{{d.days_left}} days</span>
+                                {% elif d.days_left <= 7 %} <span class="badge soon">{{d.days_left}} days</span>
+                                    {% else %} <span class="badge normal">{{d.days_left}} days</span>
+                                    {% endif %}
+
+                        </td>
+
+                        <td>
+                            <a href="/delete/{{loop.index0}}">
+                                <button class="delete">Delete</button>
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+        <div class="card">
+
+            <h3>Add Deadline</h3>
+
+            <form action="/add" method="POST">
+
+                <input name="subject" placeholder="Subject" required>
+
+                <input name="task" placeholder="Task" required>
+
+                <input type="date" name="date" required>
+
+                <button class="add">Add Deadline</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
