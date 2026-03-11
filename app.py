@@ -4,9 +4,12 @@ import sqlite3
 
 app = Flask(__name__)
 
+# DATABASE PATH (persistent storage in Azure)
+DB_PATH = "/home/deadlines.db"
+
 # DATABASE INITIALIZATION 
 def init_db():
-    conn = sqlite3.connect("deadlines.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -30,7 +33,7 @@ def home():
 
     today = datetime.today().date()
 
-    conn = sqlite3.connect("deadlines.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT id, subject, task, date FROM deadlines")
@@ -67,7 +70,7 @@ def add_deadline():
     task = request.form["task"]
     date = request.form["date"]
 
-    conn = sqlite3.connect("deadlines.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -85,7 +88,7 @@ def add_deadline():
 @app.route("/delete/<int:id>")
 def delete_deadline(id):
 
-    conn = sqlite3.connect("deadlines.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM deadlines WHERE id=?", (id,))
