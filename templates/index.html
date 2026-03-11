@@ -4,374 +4,392 @@
 
 <head>
 
-    <title>Class Deadline Tracker</title>
+<title>Class Deadline Tracker</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto;
-        }
+<style>
 
-        body {
-            margin: 0;
-            background: #f4f6fb;
-            color: #333;
-        }
+*{
+box-sizing:border-box;
+font-family:system-ui,-apple-system,Segoe UI,Roboto;
+}
 
-    
+body{
+margin:0;
+background:#f4f6fb;
+color:#333;
+}
 
-        .header {
-            background: #0078D4;
-            color: white;
-            padding: 18px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: 600;
-        }
+.header{
+background:#0078D4;
+color:white;
+padding:18px;
+text-align:center;
+font-size:22px;
+font-weight:600;
+}
 
-        /* CONTAINER */
+/* CONTAINER */
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 15px;
-        }
+.container{
+max-width:900px;
+margin:auto;
+padding:15px;
+}
 
-        /* CARDS */
+/* CARDS */
 
-        .card {
-            background: white;
-            padding: 18px;
-            margin-top: 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        }
+.card{
+background:white;
+padding:18px;
+margin-top:15px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
 
-        /* INPUTS */
+/* WARNING CARD */
 
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+.warning{
+border-left:6px solid #e74c3c;
+background:#fff5f5;
+}
 
-        /* BUTTONS */
+/* INPUTS */
 
-        button {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
+input,select{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:6px;
+border:1px solid #ccc;
+}
 
-        .add {
-            background: #0078D4;
-            color: white;
-            margin-top: 10px;
-            width: 100%;
-        }
+/* BUTTONS */
 
-        .add:hover {
-            background: #005fa3;
-        }
+button{
+padding:10px 14px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:500;
+}
 
-        .filter-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
+.add{
+background:#0078D4;
+color:white;
+margin-top:10px;
+width:100%;
+}
 
-        .filter-btn {
-            background: #444;
-            color: white;
-            flex: 1;
-        }
+.add:hover{
+background:#005fa3;
+}
 
-        .filter-btn:hover {
-            background: #222;
-        }
+.filter-row{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:10px;
+}
 
-        .delete {
-            background: #e74c3c;
-            color: white;
-        }
+.filter-btn{
+background:#444;
+color:white;
+flex:1;
+}
 
-        /* TABLE */
+.filter-btn:hover{
+background:#222;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+.delete{
+background:#e74c3c;
+color:white;
+}
 
-        th {
-            background: #0078D4;
-            color: white;
-            padding: 10px;
-            font-size: 14px;
-        }
+/* TABLE */
 
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
 
-        /* BADGES */
+th{
+background:#0078D4;
+color:white;
+padding:10px;
+font-size:14px;
+}
 
-        .badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-        }
+td{
+padding:10px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
 
-        .urgent {
-            background: #ffdddd;
-            color: #c0392b;
-        }
+/* BADGES */
 
-        .soon {
-            background: #fff4cc;
-            color: #9a7d0a;
-        }
+.badge{
+padding:4px 8px;
+border-radius:6px;
+font-size:12px;
+font-weight:600;
+}
 
-        .normal {
-            background: #eaf3ff;
-            color: #0078D4;
-        }
+.urgent{
+background:#ffdddd;
+color:#c0392b;
+}
 
-        /* MOBILE TABLE */
+.soon{
+background:#fff4cc;
+color:#9a7d0a;
+}
 
-        @media(max-width:650px) {
+.normal{
+background:#eaf3ff;
+color:#0078D4;
+}
 
-            table thead {
-                display: none;
-            }
+/* MOBILE TABLE */
 
-            table,
-            tbody,
-            tr,
-            td {
-                display: block;
-                width: 100%;
-            }
+@media(max-width:650px){
 
-            tr {
-                background: white;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-                padding: 10px;
-            }
+table thead{
+display:none;
+}
 
-            td {
-                border: none;
-                padding: 6px 0;
-            }
+table,tbody,tr,td{
+display:block;
+width:100%;
+}
 
-            td:before {
-                font-weight: 600;
-                display: block;
-                color: #777;
-                font-size: 12px;
-            }
+tr{
+background:white;
+margin-bottom:10px;
+border-radius:8px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+padding:10px;
+}
 
-            td:nth-child(1):before {
-                content: "Subject";
-            }
+td{
+border:none;
+padding:6px 0;
+}
 
-            td:nth-child(2):before {
-                content: "Task";
-            }
+td:before{
+font-weight:600;
+display:block;
+color:#777;
+font-size:12px;
+}
 
-            td:nth-child(3):before {
-                content: "Date";
-            }
+td:nth-child(1):before{content:"Subject";}
+td:nth-child(2):before{content:"Task";}
+td:nth-child(3):before{content:"Date";}
+td:nth-child(4):before{content:"Days Left";}
+td:nth-child(5):before{content:"Action";}
 
-            td:nth-child(4):before {
-                content: "Days Left";
-            }
+}
 
-            td:nth-child(5):before {
-                content: "Action";
-            }
+</style>
 
-        }
-    </style>
+<script>
 
-    <script>
+let currentDeadlineFilter="all"
+let currentSubjectFilter="all"
 
-        let currentDeadlineFilter = "all"
-        let currentSubjectFilter = "all"
+function filterDeadlines(type){
+currentDeadlineFilter=type
+applyFilters()
+}
 
-        function filterDeadlines(type) {
-            currentDeadlineFilter = type
-            applyFilters()
-        }
+function filterSubject(){
+currentSubjectFilter=document.getElementById("subjectFilter").value
+applyFilters()
+}
 
-        function filterSubject() {
-            currentSubjectFilter = document.getElementById("subjectFilter").value
-            applyFilters()
-        }
+function applyFilters(){
 
-        function applyFilters() {
+let rows=document.querySelectorAll("tbody tr")
 
-            let rows = document.querySelectorAll("tbody tr")
+let today=new Date()
+let daysUntilSunday=7-today.getDay()
 
-            let today = new Date()
-            let daysUntilSunday = 7 - today.getDay()
+rows.forEach(row=>{
 
-            rows.forEach(row => {
+let days=parseInt(row.dataset.days)
+let subject=row.dataset.subject
 
-                let days = parseInt(row.dataset.days)
-                let subject = row.dataset.subject
+let deadlineMatch=false
+let subjectMatch=false
 
-                let deadlineMatch = false
-                let subjectMatch = false
+if(currentDeadlineFilter==="all")
+deadlineMatch=true
+else if(currentDeadlineFilter==="nearest")
+deadlineMatch=(days<=3)
+else if(currentDeadlineFilter==="week")
+deadlineMatch=(days>=0 && days<=daysUntilSunday)
 
-                if (currentDeadlineFilter === "all")
-                    deadlineMatch = true
-                else if (currentDeadlineFilter === "nearest")
-                    deadlineMatch = (days <= 3)
-                else if (currentDeadlineFilter === "week")
-                    deadlineMatch = (days >= 0 && days <= daysUntilSunday)
+if(currentSubjectFilter==="all")
+subjectMatch=true
+else
+subjectMatch=(subject===currentSubjectFilter)
 
-                if (currentSubjectFilter === "all")
-                    subjectMatch = true
-                else
-                    subjectMatch = (subject === currentSubjectFilter)
+if(deadlineMatch && subjectMatch)
+row.style.display=""
+else
+row.style.display="none"
 
-                if (deadlineMatch && subjectMatch)
-                    row.style.display = ""
-                else
-                    row.style.display = "none"
+})
 
-            })
+}
 
-        }
-
-    </script>
+</script>
 
 </head>
 
 <body>
 
-    <div class="header">
-        📅 Class Deadline Tracker
-    </div>
+<div class="header">
+📅 Class Deadline Tracker
+</div>
 
-    <div class="container">
+<div class="container">
 
-        <div class="card">
+{% if tomorrow_tasks|length > 0 %}
 
-            <h3>Filters</h3>
+<div class="card warning">
 
-            <div class="filter-row">
+<h3>⚠ Due Tomorrow</h3>
 
-                <button class="filter-btn" onclick="filterDeadlines('all')">All</button>
+<ul style="margin-top:10px; padding-left:18px;">
 
-                <button class="filter-btn" onclick="filterDeadlines('nearest')">Nearest</button>
+{% for t in tomorrow_tasks %}
 
-                <button class="filter-btn" onclick="filterDeadlines('week')">This Week</button>
+<li>
+<b>{{t.subject}}</b> – {{t.task}} ({{t.date}})
+</li>
 
-            </div>
+{% endfor %}
 
-            <br>
+</ul>
 
-            <select id="subjectFilter" onchange="filterSubject()">
+</div>
 
-                <option value="all">All Subjects</option>
+{% endif %}
 
-                {% for s in subjects %}
+<div class="card">
 
-                <option value="{{s}}">{{s}}</option>
-                {% endfor %}
+<h3>Filters</h3>
 
-            </select>
+<div class="filter-row">
 
-        </div>
+<button class="filter-btn" onclick="filterDeadlines('all')">All</button>
 
-        <div class="card">
+<button class="filter-btn" onclick="filterDeadlines('nearest')">Nearest</button>
 
-            <h3>Deadlines</h3>
+<button class="filter-btn" onclick="filterDeadlines('week')">This Week</button>
 
-            <table>
+</div>
 
-                <thead>
+<br>
 
-                    <tr>
-                        <th>Subject</th>
-                        <th>Task</th>
-                        <th>Date</th>
-                        <th>Days Left</th>
-                        <th>Action</th>
-                    </tr>
+<select id="subjectFilter" onchange="filterSubject()">
 
-                </thead>
+<option value="all">All Subjects</option>
 
-                <tbody>
+{% for s in subjects %}
 
-                    {% for d in deadlines %}
+<option value="{{s}}">{{s}}</option>
 
-                    <tr data-subject="{{d.subject}}" data-days="{{d.days_left}}">
+{% endfor %}
 
-                        <td>{{d.subject}}</td>
+</select>
 
-                        <td>{{d.task}}</td>
+</div>
 
-                        <td>{{d.date}}</td>
+<div class="card">
 
-                        <td>
+<h3>Deadlines</h3>
 
-                            {% if d.days_left <= 2 %} <span class="badge urgent">{{d.days_left}} days</span>
-                                {% elif d.days_left <= 7 %} <span class="badge soon">{{d.days_left}} days</span>
-                                    {% else %} <span class="badge normal">{{d.days_left}} days</span>
-                                    {% endif %}
+<table>
 
-                        </td>
+<thead>
 
-                        <td>
-                            <a href="/delete/{{ d.id }}">
-                                <button class="delete">Delete</button>
-                            </a>
-                        </td>
+<tr>
+<th>Subject</th>
+<th>Task</th>
+<th>Date</th>
+<th>Days Left</th>
+<th>Action</th>
+</tr>
 
-                    </tr>
+</thead>
 
-                    {% endfor %}
+<tbody>
 
-                </tbody>
+{% for d in deadlines %}
 
-            </table>
+<tr data-subject="{{d.subject}}" data-days="{{d.days_left}}">
 
-        </div>
-        <div class="card">
+<td>{{d.subject}}</td>
 
-            <h3>Add Deadline</h3>
+<td>{{d.task}}</td>
 
-            <form action="/add" method="POST">
+<td>{{d.date}}</td>
 
-                <input name="subject" placeholder="Subject" required>
+<td>
 
-                <input name="task" placeholder="Task" required>
+{% if d.days_left <= 2 %} <span class="badge urgent">{{d.days_left}} days</span>
 
-                <input type="date" name="date" required>
+{% elif d.days_left <= 7 %} <span class="badge soon">{{d.days_left}} days</span>
 
-                <button class="add">Add Deadline</button>
+{% else %} <span class="badge normal">{{d.days_left}} days</span>
 
-            </form>
+{% endif %}
 
-        </div>
+</td>
 
-    </div>
+<td>
+
+<a href="/delete/{{ d.id }}">
+<button class="delete">Delete</button>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h3>Add Deadline</h3>
+
+<form action="/add" method="POST">
+
+<input name="subject" placeholder="Subject" required>
+
+<input name="task" placeholder="Task" required>
+
+<input type="date" name="date" required>
+
+<button class="add">Add Deadline</button>
+
+</form>
+
+</div>
+
+</div>
 
 </body>
 
