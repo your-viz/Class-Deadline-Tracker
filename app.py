@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 from datetime import datetime, timedelta
 import sqlite3
 
-app = Flask(**name**)
+app = Flask(__name__)
 
 # DATABASE PATH (persistent storage in Azure)
 
