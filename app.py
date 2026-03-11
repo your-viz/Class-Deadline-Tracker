@@ -5,7 +5,7 @@ import sqlite3
 app = Flask(__name__)
 
 # DATABASE PATH (persistent storage in Azure)
-DB_PATH = "/home/deadlines.db"
+DB_PATH = "/home/deadlines1.db"
 
 # DATABASE INITIALIZATION 
 def init_db():
@@ -13,7 +13,7 @@ def init_db():
     cursor = conn.cursor()
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS deadlines (
+        CREATE TABLE IF NOT EXISTS deadlines1 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             subject TEXT,
             task TEXT,
@@ -36,19 +36,19 @@ def home():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, subject, task, date FROM deadlines")
+    cursor.execute("SELECT id, subject, task, date FROM deadlines1")
     rows = cursor.fetchall()
 
     conn.close()
 
-    updated_deadlines = []
+    updated_deadlines1 = []
 
     for r in rows:
 
         deadline_date = datetime.strptime(r[3], "%Y-%m-%d").date()
         days_left = (deadline_date - today).days
 
-        updated_deadlines.append({
+        updated_deadlines1.append({
             "id": r[0],
             "subject": r[1],
             "task": r[2],
@@ -57,9 +57,9 @@ def home():
         })
 
     # Create subject list for dropdown
-    subjects = list(set([d["subject"] for d in updated_deadlines]))
+    subjects = list(set([d["subject"] for d in updated_deadlines1]))
 
-    return render_template("index.html", deadlines=updated_deadlines, subjects=subjects)
+    return render_template("index.html", deadlines1=updated_deadlines1, subjects=subjects)
 
 
 # ---------- ADD DEADLINE ----------
@@ -74,7 +74,7 @@ def add_deadline():
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO deadlines (subject, task, date) VALUES (?, ?, ?)",
+        "INSERT INTO deadlines1 (subject, task, date) VALUES (?, ?, ?)",
         (subject, task, date)
     )
 
@@ -91,7 +91,7 @@ def delete_deadline(id):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM deadlines WHERE id=?", (id,))
+    cursor.execute("DELETE FROM deadlines1 WHERE id=?", (id,))
 
     conn.commit()
     conn.close()
