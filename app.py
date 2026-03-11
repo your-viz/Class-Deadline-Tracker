@@ -4,7 +4,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-# ---------- DATABASE INITIALIZATION ----------
+# DATABASE INITIALIZATION 
 def init_db():
     conn = sqlite3.connect("deadlines.db")
     cursor = conn.cursor()
