@@ -1,378 +1,255 @@
 <!DOCTYPE html>
 
-<html>
-
+<html lang="en">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Deadline Tracker</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+```
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto;
-        }
+    .container {
+        max-width: 700px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        body {
-            margin: 0;
-            background: #f4f6fb;
-            color: #333;
-        }
+    h1, h2 {
+        text-align: center;
+    }
 
-    
+    form {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
 
-        .header {
-            background: #0078D4;
-            color: white;
-            padding: 18px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: 600;
-        }
+    input, button {
+        padding: 12px;
+        font-size: 16px;
+    }
 
-        /* CONTAINER */
+    button {
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 15px;
-        }
+    button:hover {
+        background-color: #555;
+    }
 
-        /* CARDS */
+    .deadline-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+    }
 
-        .card {
-            background: white;
-            padding: 18px;
-            margin-top: 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        }
+    .deadline-card h3 {
+        margin: 0 0 8px;
+    }
 
-        /* INPUTS */
-
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        /* BUTTONS */
-
-        button {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .add {
-            background: #0078D4;
-            color: white;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .add:hover {
-            background: #005fa3;
-        }
-
-        .filter-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .filter-btn {
-            background: #444;
-            color: white;
-            flex: 1;
-        }
-
-        .filter-btn:hover {
-            background: #222;
-        }
-
-        .delete {
-            background: #e74c3c;
-            color: white;
-        }
-
-        /* TABLE */
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th {
-            background: #0078D4;
-            color: white;
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
-
-        /* BADGES */
-
-        .badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .urgent {
-            background: #ffdddd;
-            color: #c0392b;
-        }
-
-        .soon {
-            background: #fff4cc;
-            color: #9a7d0a;
-        }
-
-        .normal {
-            background: #eaf3ff;
-            color: #0078D4;
-        }
-
-        /* MOBILE TABLE */
-
-        @media(max-width:650px) {
-
-            table thead {
-                display: none;
-            }
-
-            table,
-            tbody,
-            tr,
-            td {
-                display: block;
-                width: 100%;
-            }
-
-            tr {
-                background: white;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-                padding: 10px;
-            }
-
-            td {
-                border: none;
-                padding: 6px 0;
-            }
-
-            td:before {
-                font-weight: 600;
-                display: block;
-                color: #777;
-                font-size: 12px;
-            }
-
-            td:nth-child(1):before {
-                content: "Subject";
-            }
-
-            td:nth-child(2):before {
-                content: "Task";
-            }
-
-            td:nth-child(3):before {
-                content: "Date";
-            }
-
-            td:nth-child(4):before {
-                content: "Days Left";
-            }
-
-            td:nth-child(5):before {
-                content: "Action";
-            }
-
-        }
-    </style>
-
-    <script>
-
-        let currentDeadlineFilter = "all"
-        let currentSubjectFilter = "all"
-
-        function filterDeadlines(type) {
-            currentDeadlineFilter = type
-            applyFilters()
-        }
-
-        function filterSubject() {
-            currentSubjectFilter = document.getElementById("subjectFilter").value
-            applyFilters()
-        }
-
-        function applyFilters() {
-
-            let rows = document.querySelectorAll("tbody tr")
-
-            let today = new Date()
-            let daysUntilSunday = 7 - today.getDay()
-
-            rows.forEach(row => {
-
-                let days = parseInt(row.dataset.days)
-                let subject = row.dataset.subject
-
-                let deadlineMatch = false
-                let subjectMatch = false
-
-                if (currentDeadlineFilter === "all")
-                    deadlineMatch = true
-                else if (currentDeadlineFilter === "nearest")
-                    deadlineMatch = (days <= 3)
-                else if (currentDeadlineFilter === "week")
-                    deadlineMatch = (days >= 0 && days <= daysUntilSunday)
-
-                if (currentSubjectFilter === "all")
-                    subjectMatch = true
-                else
-                    subjectMatch = (subject === currentSubjectFilter)
-
-                if (deadlineMatch && subjectMatch)
-                    row.style.display = ""
-                else
-                    row.style.display = "none"
-
-            })
-
-        }
-
-    </script>
+    .delete-btn {
+        background-color: #d9534f;
+        margin-top: 10px;
+    }
+</style>
+```
 
 </head>
 
 <body>
 
-    <div class="header">
-        📅 Class Deadline Tracker
-    </div>
+```
+<div class="container">
 
-    <div class="container">
+    <h1>Class Deadline Tracker</h1>
 
-        <div class="card">
+    <form id="deadlineForm">
 
-            <h3>Filters</h3>
+        <input
+            type="text"
+            id="subject"
+            placeholder="Subject"
+            required
+        >
 
-            <div class="filter-row">
+        <input
+            type="text"
+            id="task"
+            placeholder="Assignment / Task"
+            required
+        >
 
-                <button class="filter-btn" onclick="filterDeadlines('all')">All</button>
+        <input
+            type="date"
+            id="deadline"
+            required
+        >
 
-                <button class="filter-btn" onclick="filterDeadlines('nearest')">Nearest</button>
+        <button type="submit">
+            Add Deadline
+        </button>
 
-                <button class="filter-btn" onclick="filterDeadlines('week')">This Week</button>
+    </form>
 
-            </div>
+    <h2>Upcoming Deadlines</h2>
 
-            <br>
+    <div id="deadlineList"></div>
 
-            <select id="subjectFilter" onchange="filterSubject()">
+</div>
 
-                <option value="all">All Subjects</option>
 
-                {% for s in subjects %}
+<script>
 
-                <option value="{{s}}">{{s}}</option>
-                {% endfor %}
+    const form = document.getElementById("deadlineForm");
 
-            </select>
+    const deadlineList =
+        document.getElementById("deadlineList");
 
-        </div>
+    let deadlines =
+        JSON.parse(localStorage.getItem("deadlines")) || [];
 
-        <div class="card">
 
-            <h3>Deadlines</h3>
+    function displayDeadlines() {
 
-            <table>
+        deadlineList.innerHTML = "";
 
-                <thead>
+        deadlines.sort(function(a, b) {
 
-                    <tr>
-                        <th>Subject</th>
-                        <th>Task</th>
-                        <th>Date</th>
-                        <th>Days Left</th>
-                        <th>Action</th>
-                    </tr>
+            return new Date(a.deadline)
+                - new Date(b.deadline);
 
-                </thead>
+        });
 
-                <tbody>
 
-                    {% for d in deadlines1 %}
+        if (deadlines.length === 0) {
 
-                    <tr data-subject="{{d.subject}}" data-days="{{d.days_left}}">
+            deadlineList.innerHTML =
+                "<p>No deadlines added yet.</p>";
 
-                        <td>{{d.subject}}</td>
+            return;
+        }
 
-                        <td>{{d.task}}</td>
 
-                        <td>{{d.date}}</td>
+        deadlines.forEach(function(item, index) {
 
-                        <td>
+            const card =
+                document.createElement("div");
 
-                            {% if d.days_left <= 2 %} <span class="badge urgent">{{d.days_left}} days</span>
-                                {% elif d.days_left <= 7 %} <span class="badge soon">{{d.days_left}} days</span>
-                                    {% else %} <span class="badge normal">{{d.days_left}} days</span>
-                                    {% endif %}
+            card.className = "deadline-card";
 
-                        </td>
 
-                        <td>
-                            <a href="/delete/{{ d.id }}">
-                                <button class="delete">Delete</button>
-                            </a>
-                        </td>
+            card.innerHTML = `
 
-                    </tr>
+                <h3>${item.subject}</h3>
 
-                    {% endfor %}
+                <p>
+                    <strong>Task:</strong>
+                    ${item.task}
+                </p>
 
-                </tbody>
+                <p>
+                    <strong>Deadline:</strong>
+                    ${item.deadline}
+                </p>
 
-            </table>
+                <button
+                    class="delete-btn"
+                    onclick="deleteDeadline(${index})">
 
-        </div>
-        <div class="card">
+                    Delete
 
-            <h3>Add Deadline</h3>
+                </button>
 
-            <form action="/add" method="POST">
+            `;
 
-                <input name="subject" placeholder="Subject" required>
 
-                <input name="task" placeholder="Task" required>
+            deadlineList.appendChild(card);
 
-                <input type="date" name="date" required>
+        });
 
-                <button class="add">Add Deadline</button>
+    }
 
-            </form>
 
-        </div>
+    form.addEventListener("submit", function(event) {
 
-    </div>
+        event.preventDefault();
+
+
+        const subject =
+            document.getElementById("subject").value;
+
+        const task =
+            document.getElementById("task").value;
+
+        const deadline =
+            document.getElementById("deadline").value;
+
+
+        deadlines.push({
+
+            subject: subject,
+
+            task: task,
+
+            deadline: deadline
+
+        });
+
+
+        localStorage.setItem(
+
+            "deadlines",
+
+            JSON.stringify(deadlines)
+
+        );
+
+
+        form.reset();
+
+        displayDeadlines();
+
+    });
+
+
+    function deleteDeadline(index) {
+
+        deadlines.splice(index, 1);
+
+
+        localStorage.setItem(
+
+            "deadlines",
+
+            JSON.stringify(deadlines)
+
+        );
+
+
+        displayDeadlines();
+
+    }
+
+
+    displayDeadlines();
+
+</script>
+```
 
 </body>
-
 </html>
